@@ -26,7 +26,8 @@
     "eslint-plugin-node": "^11.1.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.11",
-    "prettier": "^3.3.2"
+    "prettier": "^3.3.2",
+    "sequelize-cli": "^6.6.3"
   },
   "mateAcademy": {
     "projectType": "javascript"
@@ -35,6 +36,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "mysql2": "^3.15.3",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
     "react": "^18.3.1",
@@ -42,5 +44,13 @@
     "react-router-dom": "^7.9.6",
     "sequelize": "^6.37.7",
     "ws": "^8.18.3"
+  },
+  "development": {
+    "username": "postgres",
+    "password": "789789",
+    "database": "chat_DB",
+    "host": "localhost",
+    "port": 5432,
+    "dialect": "postgres"
   }
 }

@@ -2,15 +2,15 @@
 
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../db.js';
-// import User from './userModel.js';
-//import Room from './roomModel.js';
+import User from './userModel.js';
+import Room from './roomModel.js';
 
 export const Message = sequelize.define(
   'Message',
   {
     id: {
       type: DataTypes.INTEGER,
-      // primaryKey: true,
+      primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
@@ -19,22 +19,22 @@ export const Message = sequelize.define(
       allowNull: false,
     },
     // Foreign keys:
-    // userId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'users',
-    //     key: 'id',
-    //   },
-    // },
-    // roomId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'rooms',
-    //     key: 'id',
-    //   },
-    // },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    },
+    roomId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'rooms',
+        key: 'id',
+      },
+    },
   },
   {
     tableName: 'messages',
@@ -45,10 +45,10 @@ export const Message = sequelize.define(
 );
 
 // Define relationships:
-// User.hasMany(Message, { foreignKey: 'userId' });
-// Message.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Message, { foreignKey: 'userId' });
+Message.belongsTo(User, { foreignKey: 'userId' });
 
-// Room.hasMany(Message, { foreignKey: 'roomId' });
-// Message.belongsTo(Room, { foreignKey: 'roomId' });
+Room.hasMany(Message, { foreignKey: 'roomId' });
+Message.belongsTo(Room, { foreignKey: 'roomId' });
 
 export default Message;

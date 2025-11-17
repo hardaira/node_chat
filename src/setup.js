@@ -1,7 +1,7 @@
-//const { Expense } = require('./models/Expense.model');
-import { Message } from './models/messageModel';
-import { Room } from './models/roomModel';
+import { User } from './models/userModel.js';
+import { Message } from './models/messageModel.js';
+import { Room } from './models/roomModel.js';
 
-//Expense.sync({ force: false });
 Message.sync({ force: false });
 Room.sync({ force: false });
+User.sync({ force: false });

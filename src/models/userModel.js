@@ -3,8 +3,8 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../db.js';
 
-export const Room = sequelize.define(
-  'Room',
+export const User = sequelize.define(
+  'User',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -12,17 +12,17 @@ export const Room = sequelize.define(
       autoIncrement: true,
       allowNull: false,
     },
-    title: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
   },
   {
-    tableName: 'rooms',
+    tableName: 'users',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   },
 );
-
-export default Room;
+export default User;

@@ -3,8 +3,8 @@
 'use strict';
 import './setup.js';
 
-import { createServer } from './createServer';
+import { createServer } from './createServer.js';
 
-createServer().listen(5800, () => {
-  console.log('Server is running on localhost:5800');
+createServer().listen(5000, () => {
+  console.log('Server is running on localhost:5000');
 });
