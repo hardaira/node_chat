@@ -18,23 +18,31 @@ export const Message = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // Foreign keys:
-    userId: {
-      type: DataTypes.INTEGER,
+    author: {
+      type: DataTypes.STRING,
       allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
     },
     roomId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
-      references: {
-        model: 'rooms',
-        key: 'id',
-      },
     },
+    // // Foreign keys:
+    // userId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'users',
+    //     key: 'id',
+    //   },
+    // },
+    // roomId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'rooms',
+    //     key: 'id',
+    //   },
+    // },
   },
   {
     tableName: 'messages',
@@ -44,11 +52,11 @@ export const Message = sequelize.define(
   },
 );
 
-// Define relationships:
-User.hasMany(Message, { foreignKey: 'userId' });
-Message.belongsTo(User, { foreignKey: 'userId' });
+// // Define relationships:
+// User.hasMany(Message, { foreignKey: 'userId' });
+// Message.belongsTo(User, { foreignKey: 'userId' });
 
-Room.hasMany(Message, { foreignKey: 'roomId' });
-Message.belongsTo(Room, { foreignKey: 'roomId' });
+// Room.hasMany(Message, { foreignKey: 'roomId' });
+// Message.belongsTo(Room, { foreignKey: 'roomId' });
 
 export default Message;

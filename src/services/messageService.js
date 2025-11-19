@@ -27,19 +27,19 @@ const getById = async (id) => {
   return Message.findByPk(id);
 };
 
-const create = async ({ text, userId, roomId }) => {
+const create = async ({ text, author, roomId }) => {
   return Message.create({
     text,
-    userId,
+    author,
     roomId,
   });
 };
 
-const update = async ({ text, userId, roomId }) => {
+const update = async ({ text, author, roomId }) => {
   return Message.update(
     {
       text,
-      userId,
+      author,
       roomId,
     },
     { where: { id } },

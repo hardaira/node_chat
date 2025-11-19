@@ -4,6 +4,7 @@ import { Sequelize } from 'sequelize';
 import * as utils from 'util';
 import dotenv from 'dotenv';
 import './setup.js';
+
 // Load environment variables
 dotenv.config();
 

@@ -12,12 +12,12 @@ const getById = async (id) => {
   return Room.findByPk(id);
 };
 
-const create = async ({ name }) => {
-  return Room.create({ name });
+const create = async ({ title }) => {
+  return Room.create({ title });
 };
 
-const update = async ({ name }) => {
-  return Room.update({ name }, { where: { id } });
+const update = async ({ title }) => {
+  return Room.update({ title }, { where: { id } });
 };
 
 const remove = async (id) => {
