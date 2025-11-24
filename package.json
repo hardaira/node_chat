@@ -44,13 +44,5 @@
     "react-router-dom": "^7.9.6",
     "sequelize": "^6.37.7",
     "ws": "^8.18.3"
-  },
-  "development": {
-    "username": "postgres",
-    "password": "789789",
-    "database": "chat_DB",
-    "host": "localhost",
-    "port": 5432,
-    "dialect": "postgres"
   }
 }

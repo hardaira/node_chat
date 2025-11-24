@@ -1,11 +1,11 @@
 'use strict';
 
 import messageService from '../services/messageService.js';
-
+import { broadcast } from '../wsServer.js';
 // Get all expenses (with optional filters)
 export const getAllMessages = async (req, res) => {
   try {
-    const messages = await messageService.getAll(req.query);
+    const messages = await messageService.getAll();
 
     res.status(200).json(messages);
   } catch (error) {
@@ -32,14 +32,21 @@ export const getMessageById = async (req, res) => {
 };
 
 // Create a new expense
+//
 export const createMessage = async (req, res) => {
   try {
-    const newMessage = await messageService.create(req.body);
+    const { text, author, room } = req.body;
 
+    if (!text || !author || !room) {
+      return res.status(400).json({ message: 'Bad request' });
+    }
+
+    const newMessage = await messageService.create(req.body);
+    broadcast('messageCreated', newMessage);
     res.status(201).json(newMessage);
   } catch (error) {
-    // console.error('Error creating expense:', error);
-    res.status(400).json({ message: 'Failed to create message' });
+    // console.error('Error creating user:', error);
+    res.status(500).json({ message: 'Failed to create message' });
   }
 };
 
@@ -53,7 +60,7 @@ export const updateMessage = async (req, res) => {
       // Sequelize returns [0] if no rows were updated
       return res.status(404).json({ message: 'Message not found' });
     }
-
+broadcast('messageUpdated', { id, ...req.body });
     res.status(200).json({ message: 'Message updated successfully' });
   } catch (error) {
     // console.error('Error updating expense:', error);
@@ -70,7 +77,7 @@ export const deleteMessage = async (req, res) => {
     if (!deleted) {
       return res.status(404).json({ message: 'Message not found' });
     }
-
+broadcast('messageDeleted', { id });
     res.status(200).json({ message: 'Message deleted successfully' });
   } catch (error) {
     // console.error('Error deleting expense:', error);

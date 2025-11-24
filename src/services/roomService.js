@@ -12,8 +12,8 @@ const getById = async (id) => {
   return Room.findByPk(id);
 };
 
-const create = async ({ title }) => {
-  return Room.create({ title });
+const create = async ({ title, author }) => {
+  return Room.create({ title, author });
 };
 
 const update = async ({ title }) => {

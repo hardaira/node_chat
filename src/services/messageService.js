@@ -1,46 +1,33 @@
 'use strict';
 
-// import { Op } from 'sequelize';
 import { Message } from '../models/messageModel.js';
 
-const getAll = async (queryParams) => {
-  const { userId, roomId } = queryParams;
-
-  const whereCondition = {};
-
-  if (roomId) {
-    whereCondition.roomId = roomId;
-  }
-
-  if (userId) {
-    whereCondition.userId = userId;
-  }
-
-  const result = await Message.findAll({
-    where: whereCondition,
-  });
+//
+const getAll = async () => {
+  const result = await Message.findAll();
 
   return result;
 };
+
 
 const getById = async (id) => {
   return Message.findByPk(id);
 };
 
-const create = async ({ text, author, roomId }) => {
+const create = async ({ text, author, room }) => {
   return Message.create({
     text,
     author,
-    roomId,
+    room,
   });
 };
 
-const update = async ({ text, author, roomId }) => {
+const update = async ({ text, author, room }) => {
   return Message.update(
     {
       text,
       author,
-      roomId,
+      room,
     },
     { where: { id } },
   );

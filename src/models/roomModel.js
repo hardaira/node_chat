@@ -16,6 +16,10 @@ export const Room = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    author: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
   {
     tableName: 'rooms',

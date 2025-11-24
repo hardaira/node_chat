@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
+import './index.css'
 interface Room {
   id: number;
   title: string;
+  author: string;
 }
 export const App = () => {
   const [rooms, setRooms] = useState([] as Room[]);
@@ -15,6 +17,7 @@ export const App = () => {
   const [createRoomError, setCreateRoomError] = useState('');
 
   const [activeUser, setActiveUser] = useState('');
+  const [activeRoom, setActiveRoom] = useState('');
 
 
   const handleSubmit = async (e) => {
@@ -68,25 +71,6 @@ export const App = () => {
       setUsername('');
     }
   };
-
-
-
-//   const fetchRooms = async () => {
-//     try {
-//       const res = await fetch('http://localhost:5000/rooms');
-//       if (!res.ok) throw new Error('Failed to fetch rooms');
-//       const data = await res.json();
-//       setRooms(data);
-//     } catch {
-//       setError('Failed to load rooms');
-//     }
-//   };
-
-// useEffect(() => {
-//   if (isLoggedIn) {
-//     fetchRooms();
-//   }
-// }, [isLoggedIn]);
 
 
 //   const handleAddRoom = async (e) => {
@@ -177,14 +161,18 @@ const handleAddRoom = async (e) => {
     const roomsRes = await fetch('http://localhost:5000/rooms');
     if (!roomsRes.ok) throw new Error('Failed to fetch rooms');
 
+    const messagesRes = await fetch('http://localhost:5000/messages');
+    if (!messagesRes.ok) throw new Error('Failed to fetch messages');
+
     const rooms = await roomsRes.json();
+    const messages = await messagesRes.json();
 
     // 2️⃣ Check if user already exists
     const existingRoom = rooms.find((r) => r.title === newRoomTitle);
 
     if (existingRoom) {
       // If user exists → login without creating
-      //setIsLoggedIn(true);
+      // setIsLoggedIn(true);
       setNewRoomTitle(''); // clear input
       console.log(rooms);
       return;
@@ -194,7 +182,7 @@ const handleAddRoom = async (e) => {
     const createRes = await fetch('http://localhost:5000/rooms', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newRoomTitle }),
+      body: JSON.stringify({ title: newRoomTitle, author: activeUser }),
     });
 
     if (!createRes.ok) {
@@ -205,8 +193,10 @@ const handleAddRoom = async (e) => {
     console.log('Created room:', createdRoom);
     setRooms([...rooms, createdRoom]);
     // 4️⃣ Log in and clear input
-    //setIsLoggedIn(true);
+
     setNewRoomTitle('');
+    console.log(rooms);
+    console.log(messages);
   } catch (err) {
     setCreateRoomError('Failed to connect to the server');
     setNewRoomTitle('');
@@ -214,40 +204,63 @@ const handleAddRoom = async (e) => {
 };
 
 
+const handleDeleteRoom = async (
+  roomAuthor: string,
+) => {
+  if (roomAuthor !== activeUser) {
+    alert('To delete this section you must be the author.');
+    return;
+  }
 
+  try {
+    const res = await fetch(`http://localhost:5000/rooms/${roomTitle}`, {
+      method: 'DELETE',
+    });
 
+    const data = await res.json();
 
-  // const handleAddRoom = async () => {
-  //   setCreateRoomError('');
+    if (!res.ok) {
+      alert(data.message);
+      return;
+    }
 
-  //   if (!newRoomTitle.trim()) {
-  //     setCreateRoomError('Please enter a hobby.');
-  //     return;
-  //   }
+    // Remove deleted message from UI instantly
+    setRooms(rooms.filter((r) => r.title !== roomId));
+  } catch (err) {
+    alert('Failed to delete room');
+  }
+};
+// const handleDeleteRoom = async () => {
+//   // Find the roomId using roomTitle from the state
+//   const room = rooms.find((r) => r.title === roomTitle); // Match by title
 
-  //   try {
-  //     const res = await fetch('http://localhost:5000/rooms', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ title: newRoomTitle }), // backend expects {title}
-  //     });
+//   if (!room) {
+//     alert('Room not found');
+//     return;
+//   }
 
-  //     if (!res.ok) {
-  //       setCreateRoomError('Failed to create room. Check internet connection.');
-  //       return;
-  //     }
+//   if (room.author !== activeUser) {
+//     alert('You must be the author to delete this room.');
+//     return;
+//   }
 
-  //     const createdRoom = await res.json();
+//   try {
+//     const res = await fetch(`http://localhost:5000/rooms/${room.id}`, {
+//       method: 'DELETE',
+//     });
 
-  //     // Append new room to bottom of list
-  //     setRooms([...rooms, createdRoom]);
+//     if (!res.ok) {
+//       const data = await res.json();
+//       alert(data.message || 'Failed to delete room');
+//       return;
+//     }
 
-  //     setNewRoomTitle('');
-  //   } catch (err) {
-  //     setCreateRoomError('Failed to create room. Check internet connection.');
-  //     setNewRoomTitle('');
-  //   }
-  // };
+//     // Remove the deleted room from the UI instantly
+//     setRooms((prevRooms) => prevRooms.filter((r) => r.id !== room.id)); // Filter based on room.id
+//   } catch (err) {
+//     alert('Failed to delete room');
+//   }
+// };
 
   return (
     <>
@@ -262,46 +275,58 @@ const handleAddRoom = async (e) => {
             />
             <button type="submit">Submit</button>
           </form>
-
           {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
       )}
 
       {isLoggedIn && (
-        <div>
-          <h1>Choose your interest</h1>
-          <ul>
-            {rooms.map((room) => (
-              <li key={room.id}>
-                {/* <NavLink to={`/rooms/${room.title}`}>{room.title}</NavLink> */}
-                {room.title}
-              </li>
-            ))}
-          </ul>
+        <div className="page">
+          <div>
+            <h1>Choose your interest</h1>
 
-          {/* new room creation section */}
-          <div style={{ marginTop: '20px' }}>
-            <p>Nothing interesting?</p>
-            <br />
-            <form onSubmit={handleAddRoom}>
-              <input
-                type="text"
-                value={newRoomTitle}
-                placeholder="Enter Your Hobby"
-                onChange={(e) => setNewRoomTitle(e.target.value)}
-                style={{ marginRight: '10px' }}
-              />
+            <ul>
+              {rooms.map((room) => (
+                <li key={room.id}>
+                  <NavLink to={`/${room.title}`}>{room.title}</NavLink>
+                  <div
+                    onClick={() => handleDeleteRoom(room.title, room.author)}
+                  >
+                    X
+                  </div>
+                </li>
+              ))}
+            </ul>
 
-              <button type="submit">Add Your Hobby</button>
-            </form>
-            {createRoomError && (
-              <p style={{ color: 'red' }}>{createRoomError}</p>
-            )}
+            <div style={{ marginTop: '20px' }}>
+              <p>Nothing interesting?</p>
+              <br />
+
+              <form onSubmit={handleAddRoom}>
+                <input
+                  type="text"
+                  value={newRoomTitle}
+                  placeholder="Enter Your Hobby"
+                  onChange={(e) => setNewRoomTitle(e.target.value)}
+                  style={{ marginRight: '10px' }}
+                />
+                <button type="submit">Add Your Hobby</button>
+              </form>
+
+              {createRoomError && (
+                <p style={{ color: 'red' }}>{createRoomError}</p>
+              )}
+            </div>
+          </div>
+
+          {/* MUST BE INSIDE isLoggedIn */}
+          <div>
+            <Outlet context={{ author: activeUser }} />
           </div>
         </div>
       )}
     </>
   );
+
 };
 
 

@@ -2,8 +2,8 @@
 
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../db.js';
-import User from './userModel.js';
-import Room from './roomModel.js';
+// import User from './userModel.js';
+// import Room from './roomModel.js';
 
 export const Message = sequelize.define(
   'Message',
@@ -22,7 +22,7 @@ export const Message = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    roomId: {
+    room: {
       type: DataTypes.STRING,
       allowNull: false,
     },

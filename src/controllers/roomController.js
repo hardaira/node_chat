@@ -35,7 +35,7 @@ export const getRoomById = async (req, res) => {
 // Create new user
 export const createRoom = async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, author } = req.body;
 
     if (!title) {
       return res.status(400).json({ message: 'Bad request' });
