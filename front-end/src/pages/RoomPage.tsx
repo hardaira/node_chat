@@ -110,36 +110,35 @@ export const RoomPage = () => {
   };
 
   // DELETE MESSAGE
-  const handleDeleteMessage = async (
-    messageId: number,
-    messageAuthor: string,
-  ) => {
+  const handleDeleteMessage = async (messageId: number, messageAuthor: string) => {
+    // Only allow the author to delete the room
     if (messageAuthor !== author) {
-      alert('To delete a message you must be the author.');
+      alert('To delete this message you must be the author.');
       return;
     }
 
     try {
       const res = await fetch(`http://localhost:5000/messages/${messageId}`, {
         method: 'DELETE',
-
       });
 
       const data = await res.json();
 
-      if (!res.ok) {
-        alert(data.message);
-        return;
-      }
+      // if (!res.ok) {
+      //   alert(data.message || 'Failed to delete room');
+      //   return;
+      // }
 
-      // Remove deleted message from UI instantly
-      setMessages(messages.filter((m) => m.id !== messageId));
+      // Update the state to reflect the room deletion
+      setMessages((prevMessages) =>
+        prevMessages.filter((r) => r.id !== messageId),
+      );
     } catch (err) {
       alert('Failed to delete message');
     }
   };
 
-  // const filteredMessages = messages.filter((m) => m.room === room);
+  const filteredMessages = messages.filter((m) => m.room === room);
   const roomHeading = room.toUpperCase();
   return (
     <div>
@@ -162,10 +161,10 @@ export const RoomPage = () => {
       )}
 
       <ul>
-        {messages.map((message) => (
+        {filteredMessages.map((message) => (
           <li key={message.id}>
             <strong>{message.author}:</strong> {message.text}
-            
+            <div onClick={() => handleDeleteMessage(message.id, message.author)}>X</div>
           </li>
         ))}
       </ul>

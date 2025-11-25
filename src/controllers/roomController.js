@@ -69,6 +69,7 @@ broadcast('roomUpdated', { id, ...req.body });
   } catch (error) {
     // console.error('Error updating user:', error);
     res.status(400).json({ message: 'Failed to update room' });
+    console.log(err);
   }
 };
 
