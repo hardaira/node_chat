@@ -16,7 +16,7 @@ const create = async ({ name }) => {
   return User.create({ name });
 };
 
-const update = async ({ name }) => {
+const update = async ({ id, name }) => {
   return User.update({ name }, { where: { id } });
 };
 

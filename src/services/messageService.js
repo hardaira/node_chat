@@ -3,12 +3,17 @@
 import { Message } from '../models/messageModel.js';
 
 //
-const getAll = async () => {
-  const result = await Message.findAll();
+// const getAll = async () => {
+//   const result = await Message.findAll();
 
+//   return result;
+// };
+const getAll = async (room) => {
+  const result = await Message.findAll({
+    where: { room },
+  });
   return result;
 };
-
 
 const getById = async (id) => {
   return Message.findByPk(id);
