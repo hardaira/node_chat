@@ -130,13 +130,13 @@ export const App = () => {
   };
 
   // Handle updating a room
-  const handleUpdateRoom = async (roomId: number, roomAuthor: string) => {
+  const handleUpdateRoom = async (roomId: number, roomAuthor: string, editingTitle: string) => {
   // Check if the logged-in user is the author
   if (roomAuthor !== activeUser) {
     alert('To update this section you must be the author.');
     return;
   }
-
+    console.log("ggggggggggg");
   // Ensure the editing title is not empty
   if (!editingTitle.trim()) {
     alert('Room title cannot be empty');
@@ -149,11 +149,14 @@ export const App = () => {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: editingTitle }),  // Use editingTitle
-    });
 
+    });
+console.log("ddddddddddddddd");
     if (!updateRes.ok) {
       const data = await updateRes.json();
       alert(data.message || 'Failed to update room');
+      setEditMode(null);
+      console.log("lllllllllllllllll");
       return;
     }
 
@@ -166,6 +169,7 @@ export const App = () => {
     setEditMode(null);
   } catch (err) {
     alert('Failed to update room');
+    setEditMode(null);
   }
 };
 
@@ -261,8 +265,8 @@ export const App = () => {
                   {editMode === room.id ? (
                     <button
                       onClick={() => {
-                        setEditMode(null); // Reset edit mode
-                        handleUpdateRoom(room.id, room.author); // Call the update function
+                        // setEditMode(null); // Reset edit mode
+                        handleUpdateRoom(room.id, room.author, editingTitle); // Call the update function
                       }}
                     >
                       Save
