@@ -22,14 +22,8 @@ const create = async ({ text, author, room }) => {
   });
 };
 
-const update = async ({ text, author, room }) => {
-  return Message.update(
-    {
-      text,
-      author,
-      room,
-    },
-    { where: { id } },
+const update = async ({ id, text }) => {
+  return Message.update({ text }, { where: { id } },
   );
 };
 

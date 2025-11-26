@@ -16,7 +16,7 @@ const create = async ({ title, author }) => {
   return Room.create({ title, author });
 };
 
-const update = async (id, { title }) => {
+const update = async ({ id, title }) => {
   return Room.update({ title }, { where: { id } });
 };
 
