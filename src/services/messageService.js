@@ -2,12 +2,19 @@
 
 import { Message } from '../models/messageModel.js';
 
-//
 // const getAll = async () => {
 //   const result = await Message.findAll();
 
 //   return result;
 // };
+// const getAll = async (room) => {
+//   const result = await Message.findAll({
+//     where: { room },
+//   });
+//   return result;
+// };
+
+// In your service (messageService.js or wherever you have this):
 const getAll = async (room) => {
   const result = await Message.findAll({
     where: { room },
@@ -15,9 +22,13 @@ const getAll = async (room) => {
   return result;
 };
 
+
+
+
 const getById = async (id) => {
   return Message.findByPk(id);
 };
+
 
 const create = async ({ text, author, room }) => {
   return Message.create({

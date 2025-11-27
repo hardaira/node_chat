@@ -4,8 +4,9 @@ import messageService from '../services/messageService.js';
 import { broadcast } from '../wsServer.js';
 // Get all expenses (with optional filters)
 export const getAllMessages = async (req, res) => {
+  const { room } = req.query;
   try {
-    const messages = await messageService.getAll();
+    const messages = await messageService.getAll(null, room);
 
     res.status(200).json(messages);
   } catch (error) {
