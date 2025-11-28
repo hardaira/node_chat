@@ -3,14 +3,38 @@
 import messageService from '../services/messageService.js';
 import { broadcast } from '../wsServer.js';
 // Get all expenses (with optional filters)
-export const getAllMessages = async (req, res) => {
-  const { room } = req.query;
-  try {
-    const messages = await messageService.getAll(null, room);
+// export const getAllMessages = async (req, res) => {
+// const { room } = req.query;
 
+//     let filteredMessages = messages;
+
+//     // Filter by category if provided
+//     if (room) {
+//       filteredMessages = filteredMessages.filter(
+//         (m) => m.room === room,
+//       );
+//     }
+
+//     res.json(filteredMessages);
+//   };
+
+// export const getAllMessages = async (req, res) => {
+//   const { room } = req.query; // Extract filters from request
+
+//   try {
+//     const messages = await messageService.getAll(room); // Pass filters directly to the service
+//     res.status(200).json(messages);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Failed to fetch messages' });
+//   }
+// };
+
+export const getAllMessages = async (req, res) => {
+  const { room } = req.params;
+  try {
+    const messages = await messageService.getAll({ room }); // Pass filters directly to the service
     res.status(200).json(messages);
   } catch (error) {
-    // console.error('Error fetching expenses:', error);
     res.status(500).json({ message: 'Failed to fetch messages' });
   }
 };

@@ -2,6 +2,17 @@
 
 import { Message } from '../models/messageModel.js';
 
+const getAll = async ({ room }) => {
+  const result = await Message.findAll({
+    where: {
+      ...(room && { room }),
+    },
+    
+  })
+  return result;
+};
+
+
 // const getAll = async () => {
 //   const result = await Message.findAll();
 
@@ -15,12 +26,12 @@ import { Message } from '../models/messageModel.js';
 // };
 
 // In your service (messageService.js or wherever you have this):
-const getAll = async (room) => {
-  const result = await Message.findAll({
-    where: { room },
-  });
-  return result;
-};
+// const getAll = async (room) => {
+//   const result = await Message.findAll({
+//     where: { room },
+//   });
+//   return result;
+// };
 
 
 

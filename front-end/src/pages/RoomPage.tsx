@@ -4,7 +4,6 @@ import { useSearchParams, useOutletContext } from 'react-router-dom';
 interface OutletCtx {
   author: string;
 }
-
 interface Message {
   id: number;
   text: string;
@@ -17,7 +16,7 @@ export const RoomPage = () => {
   const [searchParams] = useSearchParams(); // Get the search params object
 
   // Get the 'room' query parameter from the URL
-  const { roomTitle } = searchParams.get('room');
+  const roomTitle = searchParams.get('room');
 
   const { author } = useOutletContext<OutletCtx>();
 
@@ -28,18 +27,18 @@ export const RoomPage = () => {
   const [createMessageError, setCreateMessageError] = useState('');
   const [editText, setEditText] = useState<number | null>(null);
   const [editingText, setEditingText] = useState('');
-
+  console.log(searchParams.get('room'));
   useEffect(() => {
-    if (!roomTitle) return;
+    //if (!roomTitle) return;
     // if (!isLoggedIn) return;
+//   const params = new URLSearchParams({
+//   room: roomTitle,
+// });
+
     const loadMessages = () => {
       fetch(`http://localhost:5000/messages?room=${roomTitle}`)
         .then((res) => res.json())
         .then((data) => setMessages(data))
-        // .then((data) => {
-        //   console.log('Messages from backend:', data); // ← CHECK THIS
-        //   setMessages(Array.isArray(data) ? data : []);
-        // })
         .catch(() => setError('Failed to load messages'));
     };
 
@@ -87,7 +86,7 @@ console.log("a" , roomTitle);
       //   // If user exists → login without creating
       //   // setIsLoggedIn(true);
       //   setNewMessageText(''); // clear input
-      //   console.log(messages);
+      console.log(messages);
       //   return;
       // }
 
