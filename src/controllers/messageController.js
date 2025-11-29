@@ -30,7 +30,7 @@ import { broadcast } from '../wsServer.js';
 // };
 
 export const getAllMessages = async (req, res) => {
-  const { room } = req.params;
+  const { room } = req.query;
   try {
     const messages = await messageService.getAll({ room }); // Pass filters directly to the service
     res.status(200).json(messages);
